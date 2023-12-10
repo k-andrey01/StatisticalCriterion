@@ -1,13 +1,14 @@
-package org.example
+package org.example.StudentCriterion
 
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
 
-class Student {
+class StudentLeft {
     static void main(String[] args) {
 // Имеем двухвыборочный тест, показывающий, результаты решения теста двумя группами под разное музыкальное сопровождение
-// Нулевая гипотеза - музыкальное сопровождение не влияет на результат
-// Альтернативная - влияет (имеем дело с двухсторонней критической областью)
+// Разберем левостороннюю альтернативу
+// Нулевая гипотеза - вторая композиция не хуже первой для прохождения теста
+// Альтернативная - вторая композиция хуже влияет на результат
         double[] group1 = [26, 22, 23, 26, 20, 22, 26, 25,
                            24, 21, 23, 23, 19, 29, 22]
         double[] group2 = [18, 23, 21, 20, 20, 28, 20, 16,
@@ -32,24 +33,22 @@ class Student {
         def tSecondMult = Math.sqrt((group1.size() * group2.size() * degreesOfFreedom) / (group1.size() + group2.size()))
         def tStat = (meanGroup1 - meanGroup2) * tSecondMult / tFirstMultDenom
 
-// 5. Определение критической области (для двустороннего теста)
+// 5. Определение критической области
 // Создание объекта, представляющего t-распределение
         def tDistribution = new TDistribution(degreesOfFreedom)
 // Определяем критическое значение в этом распределении
-// В контексте двустороннего теста мы берем часть из общей вероятности (1 - alpha) для каждого хвоста распределения, поэтому (1 - alpha / 2)
-        def criticalValueTwoSided = tDistribution.inverseCumulativeProbability(1 - alpha / 2)
-// Если бы была левостороння область, брали бы просто от alpha, если бы право-, то от 1-Alpha
+// В контексте левостороннего теста мы берем вероятность alpha
+        def criticalValueLeft = tDistribution.inverseCumulativeProbability(alpha)
 
 // Вывод результатов
         println "T-статистика: ${tStat}"
-        println "Критическая область (двусторонний тест): (-${criticalValueTwoSided}, ${criticalValueTwoSided})"
+        println "Критическая область (левосторонний тест): (< ${criticalValueLeft})"
 
 // 6. Определение статистической значимости
-        if (Math.abs(tStat) > criticalValueTwoSided) {
-            println "Отвергаем нулевую гипотезу. Существует статистическое различие в способности решения задач под разными типами музыки."
+        if (tStat < criticalValueLeft) {
+            println "Отвергаем нулевую гипотезу. Вторая композиция хуже влияет на результаты теста."
         } else {
-            println "Принимаем нулевую гипотезу. Нет статистического различия в способности решения задач под разными типами музыки."
+            println "Принимаем нулевую гипотезу. Вторая композиция не хуже первой для прохождения теста."
         }
-// Для лево- и правосторонних без модуля, просто меньше или больше
     }
 }
