@@ -2,7 +2,7 @@ import org.apache.commons.math3.distribution.NormalDistribution
 import org.apache.commons.math3.stat.inference.WilcoxonSignedRankTest
 import org.apache.commons.math3.util.Precision
 
-class WilcoxonTest {
+class WilcoxonLong {
     static void main(String[] args) {
         double[] ground = [10.5, 11.2, 10.8, 11.0, 10.6, 10.9, 11.3, 10.7, 10.5, 11.1]
         double[] rubber = [10.2, 10.4, 10.3, 10.5, 10.1, 10.6, 10.8, 10.7, 10.2, 10.9]
