@@ -2,14 +2,13 @@ package org.example.FisherCriterion
 
 import org.apache.commons.math3.distribution.FDistribution
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
+import org.example.MyNormalDistribution
 
 class Fisher {
     static void main(String[] args) {
         // Имеем две группы данных для проверки равенства дисперсий
-        double[] group1 = [26, 22, 23, 26, 20, 22, 26, 25,
-                           24, 21, 23, 23, 19, 29, 22]
-        double[] group2 = [18, 23, 21, 20, 20, 28, 20, 16,
-                           20, 26, 21, 25, 17, 18, 19]
+        def group1 = MyNormalDistribution.generateNormalDistribution(15, 20 as double, 3 as double)
+        def group2 = MyNormalDistribution.generateNormalDistribution(15, 20 as double, 3 as double)
 
         // Задаем уровень значимости (alpha)
         def alpha = 0.05

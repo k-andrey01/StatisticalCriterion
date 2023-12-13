@@ -2,38 +2,40 @@ package org.example.StudentCriterion
 
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
+import org.example.MyNormalDistribution
 
 class StudentRight {
     static void main(String[] args) {
 // Имеем двухвыборочный тест, показывающий, результаты решения теста двумя группами под разное музыкальное сопровождение
 // Разберем правостороннюю альтернативу (М1 > М2)
 // Нулевая гипотеза - первая композиция не лучше первой для прохождения теста
-// Альтернативная - первая композиция лучше влияет второй результат
-        double[] group1 = [26, 22, 23, 26, 20, 22, 26, 25,
-                           24, 21, 23, 23, 19, 29, 22]
-        double[] group2 = [18, 23, 21, 20, 20, 28, 20, 16,
-                           20, 26, 21, 25, 17, 18, 19]
+// Альтернативная - первая композиция лучше влияет на результат
+        int n1 = 30
+        double mean1 = 20
+        double standardDeviation1 = 3
+        int n2 = 30
+        double mean2 = 22
+        double standardDeviation2 = 3
+
+        def group1 = MyNormalDistribution.generateNormalDistribution(n1, mean1 as double, standardDeviation1 as double)
+        def group2 = MyNormalDistribution.generateNormalDistribution(n2, mean2 as double, standardDeviation2 as double)
+
+        println group1
+        println group2
 
 // Задаем уровень значимости (alpha)
         def alpha = 0.05
 
-// 1. Вычисление средних значений для каждой группы
-        def meanGroup1 = new DescriptiveStatistics(group1).getMean()
-        def meanGroup2 = new DescriptiveStatistics(group2).getMean()
-
-// 2. Вычисление дисперсий для каждой группы
-        def varianceGroup1 = new DescriptiveStatistics(group1).getVariance()
-        def varianceGroup2 = new DescriptiveStatistics(group2).getVariance()
-
-// 3. Определение степеней свободы
+// Определение степеней свободы
         def degreesOfFreedom = group1.size() + group2.size() - 2
 
-// 4. Вычисление t-статистики
-        def tFirstMultDenom = ((group1.size() - 1) * varianceGroup1) + ((group2.size() - 1) * varianceGroup2);
+// Вычисление t-статистики
+        def tFirstMultDenom = Math.sqrt((group1.size() * Math.pow(standardDeviation1, 2)) + (group2.size() * Math.pow(standardDeviation2, 2)))
         def tSecondMult = Math.sqrt((group1.size() * group2.size() * degreesOfFreedom) / (group1.size() + group2.size()))
-        def tStat = (meanGroup1 - meanGroup2) * tSecondMult / tFirstMultDenom
 
-// 5. Определение критической области (для правостороннего теста)
+        def tStat = (mean1 - mean2) * tSecondMult / tFirstMultDenom
+
+// Определение критической области (для правостороннего теста)
 // Создание объекта, представляющего t-распределение
         def tDistribution = new TDistribution(degreesOfFreedom)
 // Определяем критическое значение в этом распределении
@@ -49,7 +51,7 @@ class StudentRight {
         if (tStat > criticalValueTwoSided) {
             println "Отвергаем нулевую гипотезу. Первая композиция лучше влияет второй результат."
         } else {
-            println "Принимаем нулевую гипотезу. Первая композиция не лучше первой для прохождения теста."
+            println "Принимаем нулевую гипотезу. Первая композиция не лучше второй для прохождения теста."
         }
     }
 }
