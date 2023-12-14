@@ -1,5 +1,6 @@
 import org.apache.commons.math3.distribution.NormalDistribution
 
+//В тесте Вилкоксона используем левостороннюю альтернативу (значения второй выборки больше)
 class WilcoxonLong {
     static void main(String[] args) {
         double[] rubber = [10.2, 10.4, 10.3, 10.5, 10.1, 10.6, 10.8, 10.7, 10.2, 10.9]

@@ -24,8 +24,6 @@ class Fisher {
         def varianceGroup1 = new DescriptiveStatistics(group1).getVariance()
         def varianceGroup2 = new DescriptiveStatistics(group2).getVariance()
 
-        println varianceGroup1+"====="+varianceGroup2
-
         def variances = [varianceGroup1, varianceGroup2]
 
         println "Исправленные дисперсии: $variances"

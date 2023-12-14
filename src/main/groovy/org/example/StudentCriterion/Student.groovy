@@ -32,7 +32,6 @@ class Student {
 // Вычисление t-статистики
         def tFirstMultDenom = Math.sqrt((group1.size() * Math.pow(standardDeviation1, 2)) + (group2.size() * Math.pow(standardDeviation2, 2)))
         def tSecondMult = Math.sqrt((group1.size() * group2.size() * degreesOfFreedom) / (group1.size() + group2.size()))
-
         def tStat = (mean1 - mean2) * tSecondMult / tFirstMultDenom
 
 // Определение критической области (для двустороннего теста)

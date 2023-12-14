@@ -32,14 +32,11 @@ class StudentRight {
 // Вычисление t-статистики
         def tFirstMultDenom = Math.sqrt((group1.size() * Math.pow(standardDeviation1, 2)) + (group2.size() * Math.pow(standardDeviation2, 2)))
         def tSecondMult = Math.sqrt((group1.size() * group2.size() * degreesOfFreedom) / (group1.size() + group2.size()))
-
         def tStat = (mean1 - mean2) * tSecondMult / tFirstMultDenom
 
 // Определение критической области (для правостороннего теста)
 // Создание объекта, представляющего t-распределение
         def tDistribution = new TDistribution(degreesOfFreedom)
-        double pValue = tDistribution.cumulativeProbability(-Math.abs(tStat)) * 2;
-        println pValue
 // Определяем критическое значение в этом распределении
 // В контексте правостороннего теста мы берем вероятность 1 - alpha
         def criticalValueTwoSided = tDistribution.inverseCumulativeProbability(1 - alpha)
