@@ -1,22 +1,18 @@
 import org.apache.commons.math3.distribution.NormalDistribution
-import org.apache.commons.math3.stat.inference.WilcoxonSignedRankTest
-import org.apache.commons.math3.util.Precision
 
 class WilcoxonLong {
     static void main(String[] args) {
-        double[] ground = [10.5, 11.2, 10.8, 11.0, 10.6, 10.9, 11.3, 10.7, 10.5, 11.1]
         double[] rubber = [10.2, 10.4, 10.3, 10.5, 10.1, 10.6, 10.8, 10.7, 10.2, 10.9]
+        double[] ground = [10.5, 11.2, 10.8, 11.0, 10.6, 10.9, 11.3, 10.7, 10.5, 11.1]
 
-        def result = wilcoxonSignedRankTest(rubber, ground)
-
-        println(result)
+        wilcoxonSignedRankTest(rubber, ground)
     }
 
     static def wilcoxonSignedRankTest(double[] data1, double[] data2) {
         // Слияние массивов и сортировка
         def mergedArray = ((data1 as ArrayList) + (data2 as ArrayList)).sort()
 
-        // Индексы для элементов из первого массива, учитывая среднее арифметическое для одинаковых элементов
+        // Индексы (ранги) для элементов из первого массива, учитывая среднее арифметическое для одинаковых элементов
         def indicesArray1 = data1.collect { element ->
             def indices = mergedArray.indices.findAll { mergedArray[it] == element }
             indices.sum() / indices.size() + 1
@@ -31,12 +27,12 @@ class WilcoxonLong {
 
         println "p-значение: $p"
 
-        // Делаем вывод о статистической значимости различий
+        // Делаем вывод о статистической значимости различий. В нашел случае альтернатива левостороння (значения второй выборки больше)
         double alpha = 0.05
         if (p < alpha) {
-            return "Существуют статистически значимые различия в результатах двух групп бегунов"
+            println "Отвергаем нулевую гипотезу. Существует статистическое различие во времени бега между группами. По грунту бежать дольше (Значения второй выборки больше)"
         } else {
-            return "Существуют незначимые различия в результатах двух групп бегунов"
+            println "Принимаем нулевую гипотезу. Нет статистического различия во времени бега между группами."
         }
     }
 
